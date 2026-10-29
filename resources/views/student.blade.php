@@ -8,7 +8,7 @@
         <h1 class="h2 text-primary mb-4">Student Information</h1>
         <dl class="row mb-4">
             <dt class="col-sm-3">Full Name</dt>
-            <dd class="col-sm-9">Juan Dela Cruz</dd>
+            <dd class="col-sm-9">Zesrhel Betacura</dd>
             <dt class="col-sm-3">Course and Year</dt>
             <dd class="col-sm-9">Bachelor of Science in Information Technology — 3rd Year</dd>
             <dt class="col-sm-3">School</dt>
