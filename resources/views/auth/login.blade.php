@@ -4,10 +4,14 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="portal-card card p-4">
-            <div class="card-body">
-                <h1 class="h3 text-primary mb-4 text-center">Student Login</h1>
+    <div class="col-md-8 col-lg-5">
+        <div class="portal-card p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="brand-mark mx-auto mb-3" style="width:52px;height:52px;"><i class="bi bi-person-fill fs-4"></i></div>
+                <p class="page-kicker mb-2">Welcome back</p>
+                <h1 class="h3 mb-2">Sign in to your account</h1>
+                <p class="text-secondary small">Enter your credentials to continue.</p>
+            </div>
 
                 @if (session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
@@ -31,7 +35,7 @@
                         @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <button type="submit" class="btn btn-primary w-100 py-3">Sign In <i class="bi bi-arrow-right ms-2"></i></button>
                 </form>
 
                 <p class="text-center mt-3 mb-0">No account? <a href="{{ route('register') }}">Register here</a></p>
