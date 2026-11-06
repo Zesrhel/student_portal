@@ -16,4 +16,5 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.su
 Route::middleware('manual.auth')->group(function () {
     Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/users/{id}/deactivate', [AuthController::class, 'deactivateUser'])->name('users.deactivate');
 });

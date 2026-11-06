@@ -108,4 +108,30 @@ class AuthController extends Controller
 
         return redirect()->route('login')->with('success', 'You have been logged out.');
     }
+
+    public function deactivateUser(Request $request, int $id)
+    {
+        $currentUserId = $request->session()->get('user_id');
+
+        if ($id === (int) $currentUserId) {
+            return redirect()->route('dashboard')
+                ->withErrors(['status' => 'You cannot deactivate your own account.']);
+        }
+
+        $updated = DB::table('users')
+            ->where('id', $id)
+            ->where('is_active', true)
+            ->update([
+                'is_active' => false,
+                'updated_at' => now(),
+            ]);
+
+        if ($updated) {
+            return redirect()->route('dashboard')
+                ->with('success', 'The user account has been deactivated.');
+        }
+
+        return redirect()->route('dashboard')
+            ->withErrors(['status' => 'The account could not be deactivated.']);
+    }
 }

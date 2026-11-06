@@ -14,6 +14,15 @@
         <button type="submit" class="btn btn-outline-danger px-3 py-2"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
     </form>
 </div>
+
+@if (session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
+@if ($errors->has('status'))
+    <div class="alert alert-danger">{{ $errors->first('status') }}</div>
+@endif
+
 <div class="row g-4 mb-4">
     <div class="col-md-7">
         <div class="soft-card p-4 h-100 d-flex align-items-center gap-3">
@@ -49,7 +58,19 @@
                                 <td>{{ $activeUser->id }}</td>
                                 <td>{{ $activeUser->name }}</td>
                                 <td>{{ $activeUser->email }}</td>
-                                <td><span class="badge rounded-pill bg-success-subtle text-success-emphasis px-3 py-2">Active</span></td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="badge rounded-pill bg-success-subtle text-success-emphasis px-3 py-2">Active</span>
+                                        @if ((int) $activeUser->id !== (int) session('user_id'))
+                                            <form method="POST" action="{{ route('users.deactivate', $activeUser->id) }}">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deactivate this user account?');">
+                                                    <i class="bi bi-person-x me-1"></i>Deactivate
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
