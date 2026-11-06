@@ -75,7 +75,9 @@ class ManualAuthenticationTest extends TestCase
             'email' => 'pedro@example.com',
             'password' => 'password123',
         ])->assertRedirect('/login')
-            ->assertSessionHasErrors('email')
+            ->assertSessionHasErrors([
+                'email' => 'This account is inactive. Please contact an administrator.',
+            ])
             ->assertSessionMissing('user_id');
     }
 

@@ -24,7 +24,7 @@ class AuthController extends Controller
             ->where('email', $validated['email'])
             ->first();
 
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
+        if (!$user) {
             return back()->withInput($request->only('email'))
                 ->withErrors(['email' => 'The email address or password is incorrect.']);
         }
@@ -32,6 +32,11 @@ class AuthController extends Controller
         if (! (bool) $user->is_active) {
             return back()->withInput($request->only('email'))
                 ->withErrors(['email' => 'This account is inactive. Please contact an administrator.']);
+        }
+
+        if (!Hash::check($validated['password'], $user->password)) {
+            return back()->withInput($request->only('email'))
+                ->withErrors(['email' => 'The email address or password is incorrect.']);
         }
 
         $request->session()->regenerate();
