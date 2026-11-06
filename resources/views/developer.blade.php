@@ -8,7 +8,7 @@
         <h1 class="h2 text-primary mb-4">About the Developer</h1>
         <dl class="row mb-4">
             <dt class="col-sm-3">Name</dt>
-            <dd class="col-sm-9">Zesrhel Betacuea</dd>
+            <dd class="col-sm-9">Zesrhel Betacura</dd>
             <dt class="col-sm-3">Skills and Interests</dt>
             <dd class="col-sm-9">HTML, CSS, JavaScript, responsive design, databases, and web application development</dd>
             <dt class="col-sm-3">Why Laravel?</dt>

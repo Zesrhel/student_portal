@@ -24,17 +24,22 @@ class AuthController extends Controller
             ->where('email', $validated['email'])
             ->first();
 
-        if ($user && Hash::check($validated['password'], $user->password)) {
-            $request->session()->regenerate();
-            $request->session()->put('user_id', $user->id);
-            $request->session()->put('user_name', $user->name);
-            $request->session()->put('user_email', $user->email);
-
-            return redirect()->route('dashboard');
+        if (!$user || !Hash::check($validated['password'], $user->password)) {
+            return back()->withInput($request->only('email'))
+                ->withErrors(['email' => 'The email address or password is incorrect.']);
         }
 
-        return back()->withInput($request->only('email'))
-            ->withErrors(['email' => 'The email address or password is incorrect.']);
+        if (! (bool) $user->is_active) {
+            return back()->withInput($request->only('email'))
+                ->withErrors(['email' => 'This account is inactive. Please contact an administrator.']);
+        }
+
+        $request->session()->regenerate();
+        $request->session()->put('user_id', $user->id);
+        $request->session()->put('user_name', $user->name);
+        $request->session()->put('user_email', $user->email);
+
+        return redirect()->route('dashboard');
     }
 
     public function showRegister()
@@ -54,6 +59,7 @@ class AuthController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'is_active' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -78,13 +84,27 @@ class AuthController extends Controller
                 ->withErrors(['auth' => 'Your account could not be found.']);
         }
 
-        return view('auth.dashboard', ['user' => $user]);
+        if (! (bool) $user->is_active) {
+            $request->session()->flush();
+            return redirect()->route('login')
+                ->withErrors(['auth' => 'This account is inactive.']);
+        }
+
+        $activeUsers = DB::table('users')
+            ->where('is_active', true)
+            ->orderBy('id')
+            ->get();
+
+        return view('auth.dashboard', [
+            'user' => $user,
+            'activeUsers' => $activeUsers,
+        ]);
     }
 
     public function logout(Request $request)
     {
-        $request->session()->flush();
-        $request->session()->regenerate();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect()->route('login')->with('success', 'You have been logged out.');
     }
